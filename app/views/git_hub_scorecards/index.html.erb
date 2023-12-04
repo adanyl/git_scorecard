@@ -1,0 +1,20 @@
+<h1>GitHub Scorecard</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Contributor</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @contributors.each do |contributor| %>
+      <tr>
+        <td><%= contributor.username %></td>
+        <td><%= contributor.score %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= button_to 'Update Scores', update_score_path, method: :post %>

@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
+  root 'git_hub_scorecards#index'
+  post 'update_score', to: 'git_hub_scorecards#update_score'
 end
