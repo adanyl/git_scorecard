@@ -6,9 +6,11 @@ class GitHubScorecardsController < ApplicationController
   def update_score
     one_week_ago = Time.now - 7.days
 
-    events = github_client.repository_events('git/git', since: one_week_ago.iso8601, per_page: 100)
+    events = octokit.repository_events('git/git', per_page: 100)
 
-    events.each do |event|
+    fitered_events = events.select { |event| event.created_at > one_week_ago }
+
+    fitered_events.each do |event|
       GitHubScorecard.update_score(event['actor']['login'], event['type'], event['id'])
     end
 
@@ -17,7 +19,7 @@ class GitHubScorecardsController < ApplicationController
 
   private
 
-  def github_client
-    @github_client ||= Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
+  def octokit
+    @octokit ||= Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
   end
 end
