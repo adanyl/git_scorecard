@@ -6,7 +6,7 @@
     </tr>
   </thead>
   <tbody>
-    <% contributor_ratings.each do |contributor_rating| %>
+    <% contributor_ratings.order(score: :desc).each do |contributor_rating| %>
       <tr>
         <td><%= contributor_rating.contributor.username %></td>
         <td><%= contributor_rating.score %></td>

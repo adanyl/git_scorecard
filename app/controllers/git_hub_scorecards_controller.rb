@@ -2,7 +2,7 @@ class GitHubScorecardsController < ApplicationController
   before_action :load_rating, only: :index
 
   def index
-    @contributor_ratings = @rating&.contributor_ratings&.order(score: :desc)
+    @contributor_ratings = @rating&.contributor_ratings
   end
 
   def update_score
@@ -24,6 +24,6 @@ class GitHubScorecardsController < ApplicationController
   end
 
   def load_rating
-    @rating = Rating.last
+    @rating = Rating.order(end_date: :desc).first
   end
 end
