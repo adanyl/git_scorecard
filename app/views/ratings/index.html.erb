@@ -1,0 +1,14 @@
+<h2>Select date range:</h2>
+<%= form_with(model: @filter, url: ratings_path, method: :get) do |form| %>
+  <%= form.label :start_date %>
+  <%= form.date_field :start_date %>
+
+  <%= form.label :end_date %>
+  <%= form.date_field :end_date %>
+
+  <%= form.submit 'Filter' %>
+<% end %>
+
+<% @ratings.each do |rating| %>
+  <%= render partial: 'shared/rating_table', locals: {contributor_ratings: rating.contributor_ratings} if rating.contributor_ratings.present?%>
+<% end %>

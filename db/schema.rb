@@ -10,20 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_231_205_111_627) do
+ActiveRecord::Schema[7.0].define(version: 20_231_206_181_113) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
-  create_table 'git_hub_scorecards', force: :cascade do |t|
-    t.string 'username'
+  create_table 'contributor_ratings', force: :cascade do |t|
+    t.bigint 'contributor_id'
+    t.bigint 'rating_id'
     t.integer 'score', default: 0
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['contributor_id'], name: 'index_contributor_ratings_on_contributor_id'
+    t.index ['rating_id'], name: 'index_contributor_ratings_on_rating_id'
+  end
+
+  create_table 'contributors', force: :cascade do |t|
+    t.string 'username'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end
 
-  create_table 'processed_events', force: :cascade do |t|
-    t.string 'git_event_id'
+  create_table 'ratings', force: :cascade do |t|
+    t.datetime 'start_date'
+    t.datetime 'end_date'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end
+
+  add_foreign_key 'contributor_ratings', 'contributors'
+  add_foreign_key 'contributor_ratings', 'ratings'
 end

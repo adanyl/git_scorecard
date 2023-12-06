@@ -1,18 +1,19 @@
 class GitHubScorecardsController < ApplicationController
+  before_action :load_rating, only: :index
+
   def index
-    @contributors = GitHubScorecard.top_contributors
+    @contributor_ratings = @rating&.contributor_ratings
   end
 
   def update_score
-    one_week_ago = Date.today - 7.days
+    start_date = (Date.today - 1.week).beginning_of_day
+    end_date = Date.today.end_of_day
 
     events = octokit.repository_events('git/git', per_page: 100)
 
-    filtered_events = events.select { |event| event.created_at > one_week_ago }
+    filtered_events = events.select { |event| (start_date..end_date).cover?(event.created_at) }
 
-    filtered_events.each do |event|
-      GitHubScorecard.update_score(event['actor']['login'], event['type'], event['id'])
-    end
+    Rating.create_or_update(start_date, end_date, filtered_events)
 
     redirect_to root_path
   end
@@ -21,5 +22,9 @@ class GitHubScorecardsController < ApplicationController
 
   def octokit
     @octokit ||= Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
+  end
+
+  def load_rating
+    @rating = Rating.order(end_date: :desc).first
   end
 end
