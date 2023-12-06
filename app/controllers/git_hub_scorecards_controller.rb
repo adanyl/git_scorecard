@@ -1,10 +1,8 @@
 class GitHubScorecardsController < ApplicationController
+  before_action :load_rating, only: :index
+
   def index
-    @rating = Rating.last
-
-    return if @rating.blank?
-
-    @contributor_ratings = @rating.contributor_ratings.order(score: :desc)
+    @contributor_ratings = @rating&.contributor_ratings&.order(score: :desc)
   end
 
   def update_score
@@ -12,18 +10,9 @@ class GitHubScorecardsController < ApplicationController
     end_date = Date.today
 
     events = octokit.repository_events('git/git', per_page: 100)
-
     filtered_events = events.select { |event| event.created_at > start_date }
 
-    rating = Rating.find_or_initialize_by(start_date: start_date, end_date: end_date)
-
-    if rating.new_record?
-      rating.save
-    else
-      rating.contributor_ratings.destroy_all
-    end
-
-    create_score(rating, filtered_events)
+    Rating.create_or_update(start_date, end_date, filtered_events)
 
     redirect_to root_path
   end
@@ -34,9 +23,7 @@ class GitHubScorecardsController < ApplicationController
     @octokit ||= Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
   end
 
-  def create_score(rating, filtered_events)
-    filtered_events.each do |event|
-      rating.update_score(event['actor']['login'], event['type'])
-    end
+  def load_rating
+    @rating = Rating.last
   end
 end

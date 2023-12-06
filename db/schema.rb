@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_231_206_111_458) do
+ActiveRecord::Schema[7.0].define(version: 20_231_206_181_113) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -26,12 +26,6 @@ ActiveRecord::Schema[7.0].define(version: 20_231_206_111_458) do
 
   create_table 'contributors', force: :cascade do |t|
     t.string 'username'
-    t.datetime 'created_at', null: false
-    t.datetime 'updated_at', null: false
-  end
-
-  create_table 'processed_events', force: :cascade do |t|
-    t.string 'git_event_id'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end
