@@ -1,20 +1,24 @@
 <h1>GitHub Scorecard</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Contributor</th>
-      <th>Score</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @contributors.each do |contributor| %>
+<% if @contributor_ratings.present? %>
+  <table>
+    <thead>
       <tr>
-        <td><%= contributor.username %></td>
-        <td><%= contributor.score %></td>
+        <th>Contributor</th>
+        <th>Score</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @contributor_ratings.each do |contributor_rating| %>
+        <tr>
+          <td><%= contributor_rating.contributor.username %></td>
+          <td><%= contributor_rating.score %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <h2>There are no scores</h2>
+<% end %>
 
 <%= button_to 'Update Scores', update_score_path, method: :post %>
