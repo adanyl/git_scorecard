@@ -33,3 +33,4 @@
 #env
 /.env
 /.byebug_history
+/.idea

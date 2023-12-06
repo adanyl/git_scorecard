@@ -1,10 +1,10 @@
 class GitHubScorecardsController < ApplicationController
   def index
-    rating = Rating.last
+    @rating = Rating.last
 
-    return if rating.blank?
+    return if @rating.blank?
 
-    @contributor_ratings = rating.contributor_ratings.order(score: :desc)
+    @contributor_ratings = @rating.contributor_ratings.order(score: :desc)
   end
 
   def update_score

@@ -1,24 +1,12 @@
 <h1>GitHub Scorecard</h1>
 
 <% if @contributor_ratings.present? %>
-  <table>
-    <thead>
-      <tr>
-        <th>Contributor</th>
-        <th>Score</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @contributor_ratings.each do |contributor_rating| %>
-        <tr>
-          <td><%= contributor_rating.contributor.username %></td>
-          <td><%= contributor_rating.score %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <h2>Date range: <%= @rating.start_date.to_date %> -- <%= @rating.end_date.to_date %></h2>
+  <%= render partial: 'shared/rating_table', locals: {contributor_ratings: @contributor_ratings} if @contributor_ratings.present? %>
 <% else %>
   <h2>There are no scores</h2>
 <% end %>
 
 <%= button_to 'Update Scores', update_score_path, method: :post %>
+<br/>
+<%= link_to 'Other Ratings', ratings_path, method: :post %>

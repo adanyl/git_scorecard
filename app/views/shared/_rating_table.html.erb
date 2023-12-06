@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <tr>
+      <th>Contributor</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% contributor_ratings.each do |contributor_rating| %>
+      <tr>
+        <td><%= contributor_rating.contributor.username %></td>
+        <td><%= contributor_rating.score %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

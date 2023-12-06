@@ -2,6 +2,8 @@ class Rating < ApplicationRecord
   has_many :contributor_ratings, dependent: :destroy
   has_many :contributors, through: :contributor_ratings
 
+  scope :filtered_by_dates, ->(start_date, end_date) { where(start_date: start_date, end_date: end_date) }
+
   def update_score(username, event_type)
     score = case event_type
             when 'PullRequestEvent' then 12
