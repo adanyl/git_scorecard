@@ -6,11 +6,12 @@ class GitHubScorecardsController < ApplicationController
   end
 
   def update_score
-    start_date = Date.today - 1.week
-    end_date = Date.today
+    start_date = (Date.today - 1.week).beginning_of_day
+    end_date = Date.today.end_of_day
 
     events = octokit.repository_events('git/git', per_page: 100)
-    filtered_events = events.select { |event| event.created_at > start_date }
+
+    filtered_events = events.select { |event| (start_date..end_date).cover?(event.created_at) }
 
     Rating.create_or_update(start_date, end_date, filtered_events)
 
