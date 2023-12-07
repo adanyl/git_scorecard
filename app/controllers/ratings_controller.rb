@@ -1,7 +1,8 @@
 class RatingsController < ApplicationController
   def index
     @filter = RatingFilterForm.new(filter_params)
-    @ratings = Rating.filtered_by_dates(@filter.start_date&.beginning_of_day, @filter.end_date&.end_of_day)
+    @ratings = Rating.filtered_by_dates(@filter.start_date&.beginning_of_day,
+                                        @filter.end_date&.end_of_day).includes(:contributor_ratings)
   end
 
   private
